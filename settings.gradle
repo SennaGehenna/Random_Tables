@@ -1,0 +1,2 @@
+rootProject.name='Random Tables for Blades in the Dark'
+include ':app'
