@@ -2,6 +2,7 @@ package io.github.sennagehenna.randomtables.ui.start
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.sennagehenna.randomtables.R
 import io.github.sennagehenna.randomtables.databinding.ItemMytableBinding
