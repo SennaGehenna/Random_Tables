@@ -1,4 +1,4 @@
-package io.github.sennagehenna.randomtables.ui.start
+package io.github.sennagehenna.randomtables.ui.my_tables
 
 import io.github.sennagehenna.randomtables.ui.base.BaseFragment
 import io.github.sennagehenna.randomtables.ui.base.BaseKey

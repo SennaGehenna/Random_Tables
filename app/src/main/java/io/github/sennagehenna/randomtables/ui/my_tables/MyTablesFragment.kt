@@ -1,4 +1,4 @@
-package io.github.sennagehenna.randomtables.ui.start
+package io.github.sennagehenna.randomtables.ui.my_tables
 
 import android.os.Bundle
 import android.view.View
@@ -12,32 +12,19 @@ import io.github.sennagehenna.randomtables.model.ReRollMode
 import io.github.sennagehenna.randomtables.model.Table
 import io.github.sennagehenna.randomtables.ui.base.BaseAdapter
 import io.github.sennagehenna.randomtables.ui.base.BaseFragment
+import io.github.sennagehenna.randomtables.ui.base.TypedClick
+import io.github.sennagehenna.randomtables.ui.specific_table.SpecificTableKey
 
 class MyTablesFragment : BaseFragment() {
 
     override val layoutId = R.layout.screen_mytables
 
     override val bottomFabAction: BottomFabAction? = BottomFabAction(R.drawable.ic_baseline_add_24) {
-        //TODO
+        TODO("navigate to add_table")
     }
 
-    private val adapter = object : BaseAdapter<Table>() {
-        override fun getItemLayoutId(viewType: Int) = R.layout.item_mytable
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            with(ItemMytableBinding.bind(holder.itemView)) {
-                val table = items[position]
-                txtName.text = table.title
-                val (type, count) = when (table) {
-                    is Table.BasicTable -> Pair("Basic Table", table.options.size)
-                    is Table.TableWithSubTables -> Pair("Table of Tables", table.subTables.flatMap { it.options }.size)
-                }
-
-                txtType.text = type
-                txtCount.text = "$count options"
-            }
-        }
-
+    private val adapter = TableAdapter {
+        backStack.goTo(SpecificTableKey(it.id))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,9 +37,11 @@ class MyTablesFragment : BaseFragment() {
 
         adapter.items = mutableListOf(
             Table.TableWithSubTables(
+                id = "1",
                 title = "Client/Target",
                 subTables = listOf(
                     Table.BasicTable(
+                        id = "2",
                         title = "Civilian",
                         options = mutableListOf(
                             "academic or scholar",
@@ -64,6 +53,7 @@ class MyTablesFragment : BaseFragment() {
                         ).map { Option(it) }
                     ),
                     Table.BasicTable(
+                        id = "3",
                         title = "Criminal",
                         options = listOf(
                             "drug dealer or supplier",
@@ -75,6 +65,7 @@ class MyTablesFragment : BaseFragment() {
                         ).map { Option(it) }
                     ),
                     Table.BasicTable(
+                        id = "4",
                         title = "Political",
                         options = listOf(
                             "noble or official",
@@ -85,6 +76,7 @@ class MyTablesFragment : BaseFragment() {
                         ).map { Option(it) }
                     ),
                     Table.BasicTable(
+                        id = "5",
                         title = "Strange",
                         options = listOf(
                             Option("ghost of %s", ReRollMode.ReRollTable),
@@ -98,9 +90,11 @@ class MyTablesFragment : BaseFragment() {
                 )
             ),
             Table.TableWithSubTables(
+                id = "6",
                 title = "Work",
                 subTables = listOf(
                     Table.BasicTable(
+                        id = "7",
                         title = "Skullduggery",
                         options = listOf(
                             "stalking or surveillance",
@@ -112,6 +106,7 @@ class MyTablesFragment : BaseFragment() {
                         ).map { Option(it) }
                     ),
                     Table.BasicTable(
+                        id = "8",
                         title = "Violence",
                         options = listOf(
                             "assassinate",
@@ -123,6 +118,7 @@ class MyTablesFragment : BaseFragment() {
                         ).map { Option(it) }
                     ),
                     Table.BasicTable(
+                        id = "9",
                         title = "Underworld",
                         options = listOf(
                             "escort or security",
@@ -134,6 +130,7 @@ class MyTablesFragment : BaseFragment() {
                         ).map { Option(it) }
                     ),
                     Table.BasicTable(
+                        id = "10",
                         title = "Unnatural",
                         options = listOf(
                             "curse or sanctify",
@@ -147,6 +144,7 @@ class MyTablesFragment : BaseFragment() {
                 )
             ),
             Table.BasicTable(
+                id = "11",
                 title = "Twist/Complication",
                 options = listOf(
                     "an element is a cover for heretic spirit cult practices",
@@ -170,6 +168,7 @@ class MyTablesFragment : BaseFragment() {
                 ).map { Option(it) }
             ),
             Table.BasicTable(
+                id = "12",
                 title = "Connected to a person",
                 options = listOf(
                     "PC Friend",
@@ -181,6 +180,7 @@ class MyTablesFragment : BaseFragment() {
                 ).map { Option(it) }
             ),
             Table.BasicTable(
+                id = "13",
                 title = "and Factions",
                 amountOfRolls = 2,
                 options = listOf(
@@ -223,5 +223,29 @@ class MyTablesFragment : BaseFragment() {
                 ).map { Option(it) }
             )
         )
+    }
+
+
+    class TableAdapter(val click: TypedClick<Table>) : BaseAdapter<Table>() {
+        override fun getItemLayoutId(viewType: Int) = R.layout.item_mytable
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            with(ItemMytableBinding.bind(holder.itemView)) {
+                val table = items[position]
+                txtName.text = table.title
+                val (type, count) = when (table) {
+                    is Table.BasicTable -> Pair("Basic Table", table.options.size)
+                    is Table.TableWithSubTables -> Pair("Table of Tables", table.subTables.flatMap { it.options }.size)
+                }
+
+                txtType.text = type
+                txtCount.text = "$count options"
+
+                root.setOnClickListener {
+                    click(items[holder.adapterPosition])
+                }
+            }
+        }
+
     }
 }

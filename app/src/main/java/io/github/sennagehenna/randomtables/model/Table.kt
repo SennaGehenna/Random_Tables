@@ -1,12 +1,12 @@
 package io.github.sennagehenna.randomtables.model
 
-sealed class Table(val title: String) {
+sealed class Table(val id: String, val title: String) {
 
     abstract fun getRandomOptions(): List<Option>
 
     protected fun List<Option>.getRandomExcluding(option: Option) = filterNot { it == option }.random()
 
-    class BasicTable(title: String, val amountOfRolls: Int = 1, val options: List<Option>) : Table(title) {
+    class BasicTable(id: String, title: String, val amountOfRolls: Int = 1, val options: List<Option>) : Table(id, title) {
 
         override fun getRandomOptions(): List<Option> {
 
@@ -20,7 +20,7 @@ sealed class Table(val title: String) {
         }
     }
 
-    class TableWithSubTables(title: String, val subTables: List<BasicTable>) : Table(title) {
+    class TableWithSubTables(id: String, title: String, val subTables: List<BasicTable>) : Table(id, title) {
 
         override fun getRandomOptions(): List<Option> {
             val subTable: BasicTable = subTables.random()

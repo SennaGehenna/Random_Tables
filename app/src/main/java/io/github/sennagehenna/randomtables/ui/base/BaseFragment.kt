@@ -26,6 +26,15 @@ abstract class BaseFragment : Fragment() {
         return inflate
     }
 
+    open fun canGoBack(): Boolean {
+        return true
+    }
+
+    fun handleBackPress() {
+        if (canGoBack()) {
+            (activity as? MainActivity)?.goBack()
+        }
+    }
 
     class BottomFabAction(val drawableRes: Int, val click: Click)
 
